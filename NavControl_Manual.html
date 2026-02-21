@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NavControl v13 — Manual de Uso</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Sans+3:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --navy:      #0b1e3d;
+  --navy-mid:  #132952;
+  --navy-lt:   #1e3a6e;
+  --gold:      #c8922a;
+  --gold-lt:   #e8b84b;
+  --gold-pale: #fdf3e0;
+  --ink:       #1a2035;
+  --slate:     #4a5568;
+  --mist:      #e8edf5;
+  --fog:       #f4f6fb;
+  --white:     #ffffff;
+  --danger:    #c0392b;
+  --success:   #1a7a4a;
+  --info:      #1565c0;
+  --warn:      #b7590a;
+  --r:         8px;
+  --r-lg:      14px;
+  --r-xl:      20px;
+  --sh:        0 2px 16px rgba(11,30,61,0.10);
+  --sh-lg:     0 8px 40px rgba(11,30,61,0.15);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--fog);
+  color: var(--ink);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--mist); }
+::-webkit-scrollbar-thumb { background: var(--navy-lt); border-radius: 3px; }
+
+/* ════════════════════════════════════════════════
+   COVER PAGE
+   ════════════════════════════════════════════════ */
+#cover {
+  min-height: 100vh;
+  background: var(--navy);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 60px 24px;
+}
+
+/* Compass rose SVG bg */
+#cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(200,146,42,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 50% at 20% 20%, rgba(30,58,110,0.6) 0%, transparent 60%);
+}
+
+.cover-rope {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  background: repeating-linear-gradient(90deg, var(--gold) 0px, var(--gold) 14px, var(--gold-lt) 14px, var(--gold-lt) 28px);
+}
+
+.cover-anchor-wrap {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 32px;
+}
+.cover-anchor {
+  font-size: 80px;
+  line-height: 1;
+  filter: drop-shadow(0 4px 24px rgba(200,146,42,0.45));
+  animation: anchorBob 4s ease-in-out infinite;
+}
+@keyframes anchorBob {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+.cover-badge {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--navy);
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 4px 16px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  position: relative; z-index: 2;
+}
+
+.cover-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(42px, 7vw, 78px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.05;
+  position: relative; z-index: 2;
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+}
+.cover-title em {
+  color: var(--gold-lt);
+  font-style: normal;
+  text-decoration: underline;
+  text-decoration-color: rgba(200,146,42,0.4);
+  text-underline-offset: 6px;
+}
+
+.cover-sub {
+  font-size: 18px;
+  color: rgba(255,255,255,0.65);
+  font-weight: 300;
+  position: relative; z-index: 2;
+  max-width: 560px;
+  margin: 0 auto 36px;
+  letter-spacing: 0.3px;
+}
+
+.cover-version {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 2px;
+  position: relative; z-index: 2;
+  margin-bottom: 48px;
+}
+
+.cover-start-btn {
+  position: relative; z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 36px;
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  border-radius: 50px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 4px 24px rgba(200,146,42,0.4);
+  letter-spacing: 0.5px;
+}
+.cover-start-btn:hover {
+  background: var(--gold-lt);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(200,146,42,0.5);
+}
+
+.cover-toc-preview {
+  position: relative; z-index: 2;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 48px;
+}
+.toc-pill {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.13);
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.toc-pill:hover { background: rgba(200,146,42,0.2); border-color: var(--gold); color: var(--gold); }
+
+/* ════════════════════════════════════════════════
+   LAYOUT
+   ════════════════════════════════════════════════ */
+#manual {
+  display: none;
+  min-height: 100vh;
+}
+
+.nav-sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: 280px;
+  background: var(--navy);
+  overflow-y: auto;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s;
+}
+
+.nav-brand {
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nav-brand-icon {
+  width: 38px; height: 38px;
+  background: var(--gold);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--navy);
+  flex-shrink: 0;
+}
+.nav-brand-text { font-family: 'Playfair Display', serif; color: var(--white); font-size: 16px; font-weight: 700; line-height: 1.2; }
+.nav-brand-version { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--gold); letter-spacing: 1px; }
+
+.nav-search {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.nav-search input {
+  width: 100%;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--white);
+  font-size: 13px;
+  font-family: 'Source Sans 3', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.nav-search input::placeholder { color: rgba(255,255,255,0.35); }
+.nav-search input:focus { border-color: var(--gold); }
+
+.nav-scroll { flex: 1; overflow-y: auto; padding: 12px 0 24px; }
+
+.nav-section-label {
+  padding: 12px 20px 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 20px;
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+  font-size: 13px;
+  transition: all 0.18s;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+}
+.nav-link i { width: 16px; text-align: center; font-size: 13px; flex-shrink: 0; }
+.nav-link:hover { color: var(--white); background: rgba(255,255,255,0.05); }
+.nav-link.active { color: var(--gold-lt); border-left-color: var(--gold); background: rgba(200,146,42,0.1); }
+
+.nav-progress-bar {
+  height: 2px;
+  background: rgba(255,255,255,0.06);
+  margin: 8px 20px;
+}
+.nav-progress-fill {
+  height: 100%;
+  background: var(--gold);
+  border-radius: 1px;
+  transition: width 0.3s;
+  width: 0%;
+}
+
+.nav-back-cover {
+  padding: 12px 16px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.nav-back-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.55);
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Source Sans 3', sans-serif;
+}
+.nav-back-btn:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+
+/* ── CONTENT AREA ── */
+.content-area {
+  margin-left: 280px;
+  min-height: 100vh;
+}
+
+/* ── HAMBURGER ── */
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 16px; left: 16px;
+  z-index: 200;
+  background: var(--navy);
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  box-shadow: var(--sh);
+  color: var(--white);
+  font-size: 18px;
+}
+
+/* ════════════════════════════════════════════════
+   SECTIONS
+   ════════════════════════════════════════════════ */
+.section {
+  padding: 64px 56px;
+  border-bottom: 1px solid var(--mist);
+  max-width: 900px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+.section.visible { opacity: 1; transform: translateY(0); }
+.section:last-child { border-bottom: none; min-height: 80vh; }
+
+/* Section header */
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 24px; height: 2px;
+  background: var(--gold);
+  border-radius: 1px;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.15;
+  margin-bottom: 16px;
+  letter-spacing: -0.5px;
+}
+.section-title .hl { color: var(--gold); }
+
+.section-lead {
+  font-size: 17px;
+  color: var(--slate);
+  max-width: 680px;
+  margin-bottom: 36px;
+  line-height: 1.75;
+  font-weight: 300;
+}
+
+h3.sub-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 40px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+h3.sub-title i { color: var(--gold); font-size: 18px; }
+
+h4.step-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy-mid);
+  margin: 24px 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+p { margin-bottom: 14px; color: var(--slate); }
+p strong { color: var(--ink); font-weight: 600; }
+
+/* ════════════════════════════════════════════════
+   COMPONENTS
+   ════════════════════════════════════════════════ */
+
+/* Feature card */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+.feature-card {
+  background: var(--white);
+  border: 1px solid var(--mist);
+  border-radius: var(--r-lg);
+  padding: 20px 18px;
+  box-shadow: var(--sh);
+  transition: all 0.2s;
+  cursor: default;
+}
+.feature-card:hover {
+  border-color: var(--gold);
+  box-shadow: 0 4px 24px rgba(200,146,42,0.12);
+  transform: translateY(-2px);
+}
+.feature-card-icon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+.fc-navy   { background: rgba(11,30,61,0.08);   color: var(--navy); }
+.fc-gold   { background: rgba(200,146,42,0.12);  color: var(--gold); }
+.fc-green  { background: rgba(26,122,74,0.1);    color: var(--success); }
+.fc-red    { background: rgba(192,57,43,0.1);    color: var(--danger); }
+.fc-blue   { background: rgba(21,101,192,0.1);   color: var(--info); }
+.fc-warn   { background: rgba(183,89,10,0.1);    color: var(--warn); }
+.feature-card h4 { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 5px; }
+.feature-card p  { font-size: 13px; color: var(--slate); margin: 0; line-height: 1.55; }
+
+/* Steps */
+.steps { margin: 24px 0; }
+.step {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  align-items: flex-start;
+}
+.step-num {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  background: var(--navy);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  margin-top: 1px;
+}
+.step-body { flex: 1; }
+.step-body strong { display: block; font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+.step-body p { font-size: 13px; margin: 0; line-height: 1.55; }
+
+/* UI Mockup */
+.mockup {
+  background: var(--white);
+  border: 1px solid var(--mist);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-lg);
+  overflow: hidden;
+  margin: 24px 0;
+}
+.mockup-bar {
+  background: var(--navy);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+.mockup-dot.r { background: #ff5f56; }
+.mockup-dot.y { background: #ffbd2e; }
+.mockup-dot.g { background: #27c93f; }
+.mockup-bar-title { color: rgba(255,255,255,0.5); font-size: 12px; font-family: 'JetBrains Mono', monospace; margin-left: 8px; }
+.mockup-body { padding: 20px 24px; }
+
+/* Screen mockup */
+.screen-mock {
+  background: var(--fog);
+  border-radius: var(--r);
+  padding: 16px;
+  margin: 16px 0;
+  border: 1px solid var(--mist);
+  font-size: 13px;
+}
+.screen-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--white);
+  border-radius: 6px;
+  margin-bottom: 6px;
+  border: 1px solid var(--mist);
+}
+.screen-row:last-child { margin-bottom: 0; }
+.screen-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.screen-row-label { font-weight: 600; color: var(--ink); font-size: 13px; flex: 1; }
+.screen-row-meta { font-size: 11px; color: var(--slate); }
+
+/* Pills/badges */
+.badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.badge-navy  { background: var(--navy); color: var(--white); }
+.badge-gold  { background: var(--gold-pale); color: var(--gold); border: 1px solid rgba(200,146,42,0.3); }
+.badge-green { background: rgba(26,122,74,0.1); color: var(--success); border: 1px solid rgba(26,122,74,0.2); }
+.badge-red   { background: rgba(192,57,43,0.1); color: var(--danger); border: 1px solid rgba(192,57,43,0.2); }
+.badge-blue  { background: rgba(21,101,192,0.1); color: var(--info); border: 1px solid rgba(21,101,192,0.2); }
+.badge-warn  { background: rgba(183,89,10,0.1); color: var(--warn); border: 1px solid rgba(183,89,10,0.2); }
+
+/* Callout boxes */
+.callout {
+  display: flex;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: var(--r-lg);
+  margin: 20px 0;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.callout i { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.callout-info    { background: rgba(21,101,192,0.06);  border: 1px solid rgba(21,101,192,0.2);  color: #1a3a7a; }
+.callout-info i  { color: var(--info); }
+.callout-tip     { background: rgba(26,122,74,0.06);   border: 1px solid rgba(26,122,74,0.2);   color: #0d4224; }
+.callout-tip i   { color: var(--success); }
+.callout-warn    { background: rgba(183,89,10,0.07);   border: 1px solid rgba(183,89,10,0.2);   color: #5c2e00; }
+.callout-warn i  { color: var(--warn); }
+.callout-danger  { background: rgba(192,57,43,0.07);   border: 1px solid rgba(192,57,43,0.2);   color: #6b0e0e; }
+.callout-danger i{ color: var(--danger); }
+
+/* KPI demo */
+.kpi-demo {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+.kpi-demo-card {
+  background: var(--white);
+  border: 1px solid var(--mist);
+  border-radius: var(--r-lg);
+  padding: 16px;
+  box-shadow: var(--sh);
+}
+.kpi-demo-label { font-size: 11px; font-weight: 600; letter-spacing: 0.5px; color: var(--slate); text-transform: uppercase; margin-bottom: 4px; }
+.kpi-demo-value { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; color: var(--navy); }
+.kpi-demo-trend { font-size: 11px; color: var(--slate); margin-top: 2px; }
+
+/* Progress bar demo */
+.progress-demo { background: var(--white); border: 1px solid var(--mist); border-radius: var(--r-lg); padding: 16px; margin: 12px 0; box-shadow: var(--sh); }
+.pd-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink); margin-bottom: 6px; }
+.pd-label strong { font-weight: 600; }
+.pd-bar { height: 8px; background: var(--mist); border-radius: 4px; overflow: hidden; }
+.pd-fill { height: 100%; border-radius: 4px; transition: width 1.2s cubic-bezier(.4,0,.2,1); width: 0%; }
+.pd-fill.ok   { background: #0ea5e9; }
+.pd-fill.warn { background: var(--warn); }
+.pd-fill.crit { background: var(--danger); }
+.pd-meta { font-size: 11px; color: var(--slate); margin-top: 4px; }
+
+/* Alert demo */
+.alert-demo {
+  border-radius: var(--r);
+  padding: 12px 16px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0;
+  font-weight: 600;
+}
+.ad-crit { background: rgba(192,57,43,0.08); border: 1px solid rgba(192,57,43,0.25); color: var(--danger); }
+.ad-warn { background: rgba(183,89,10,0.08); border: 1px solid rgba(183,89,10,0.25); color: var(--warn); }
+.ad-ok   { background: rgba(26,122,74,0.08); border: 1px solid rgba(26,122,74,0.25); color: var(--success); }
+
+/* Keyboard key */
+kbd {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background: var(--fog);
+  border: 1px solid var(--mist);
+  border-bottom: 2px solid var(--mist);
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* Table */
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 16px 0;
+  background: var(--white);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--sh);
+}
+.doc-table th {
+  background: var(--navy);
+  color: var(--white);
+  padding: 11px 14px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+}
+.doc-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--mist);
+  color: var(--slate);
+  vertical-align: top;
+}
+.doc-table td:first-child { color: var(--ink); font-weight: 600; }
+.doc-table tr:last-child td { border-bottom: none; }
+.doc-table tr:hover td { background: var(--fog); }
+
+/* Hash demo */
+.hash-display {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: var(--navy);
+  background: var(--fog);
+  border: 2px solid var(--mist);
+  border-radius: var(--r);
+  padding: 10px 18px;
+  display: inline-block;
+  margin: 8px 0;
+}
+.hash-display .hash-prefix { color: var(--gold); font-weight: 700; }
+
+/* Section divider */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--mist) 20%, var(--mist) 80%, transparent);
+  margin: 32px 0;
+}
+
+/* Sidebar nav highlight demo */
+.sidebar-demo {
+  background: var(--navy-mid);
+  border-radius: var(--r-lg);
+  padding: 12px 0;
+  width: 200px;
+  font-size: 12px;
+}
+.sd-item {
+  padding: 7px 16px;
+  color: rgba(255,255,255,0.6);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border-left: 2px solid transparent;
+}
+.sd-item:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
+.sd-item.active { background: rgba(200,146,42,0.15); color: var(--gold-lt); border-left-color: var(--gold); }
+.sd-item i { width: 14px; text-align: center; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .nav-sidebar { transform: translateX(-100%); }
+  .nav-sidebar.open { transform: translateX(0); }
+  .content-area { margin-left: 0; }
+  .hamburger { display: flex; }
+  .section { padding: 56px 24px; }
+  .feature-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .feature-grid { grid-template-columns: 1fr; }
+  .kpi-demo { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Sticky header above content ── */
+.content-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(244,246,251,0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--mist);
+  padding: 12px 56px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.content-header-title { font-size: 13px; font-weight: 600; color: var(--navy); }
+.content-header-section { font-size: 12px; color: var(--slate); }
+@media (max-width: 900px) {
+  .content-header { padding: 12px 24px 12px 64px; }
+}
+
+/* ── Quote / highlight ── */
+.pullquote {
+  border-left: 4px solid var(--gold);
+  padding: 12px 20px;
+  background: var(--gold-pale);
+  border-radius: 0 var(--r) var(--r) 0;
+  margin: 20px 0;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--navy);
+}
+
+/* ── Float chip grid for filters ── */
+.chip-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: var(--white);
+  border: 1px solid var(--mist);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  box-shadow: var(--sh);
+}
+.chip i { color: var(--gold); font-size: 11px; }
+
+/* ── Icon list ── */
+.icon-list { list-style: none; margin: 0; }
+.icon-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--mist);
+  font-size: 14px;
+}
+.icon-list li:last-child { border-bottom: none; }
+.icon-list li i { color: var(--gold); width: 18px; text-align: center; margin-top: 2px; flex-shrink: 0; }
+
+/* tooltip */
+[data-tip] {
+  position: relative;
+  cursor: help;
+  text-decoration: underline dotted var(--gold);
+}
+[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--navy);
+  color: var(--white);
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+  z-index: 9999;
+  pointer-events: none;
+  font-style: normal;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  max-width: 280px;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.45;
+}
+
+/* PDF hash visual */
+.pdf-preview-demo {
+  border: 1.5px solid var(--mist);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--sh-lg);
+  margin: 20px 0;
+}
+.pdf-header-demo {
+  background: var(--navy);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pdf-gold-line { height: 3px; background: linear-gradient(90deg, var(--gold), var(--gold-lt)); }
+.pdf-body-demo { background: var(--white); padding: 16px 20px; }
+.pdf-row-demo { display: flex; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+.pdf-field { flex: 1; min-width: 120px; }
+.pdf-field-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--slate); font-weight: 600; }
+.pdf-field-value { font-size: 14px; font-weight: 600; color: var(--navy); margin-top: 2px; }
+.pdf-footer-demo {
+  background: var(--navy);
+  padding: 8px 20px;
+  font-size: 10px;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     COVER
+══════════════════════════════════════════════ -->
+<div id="cover">
+  <div class="cover-rope"></div>
+  <div class="cover-anchor-wrap">
+    <div class="cover-anchor">⚓</div>
+  </div>
+  <div class="cover-badge">Manual Interativo de Uso</div>
+  <h1 class="cover-title">Nav<em>Control</em></h1>
+  <p class="cover-sub">Sistema de Gestão de Abastecimento Naval — óleo, água, transferências e relatórios de auditoria em uma única plataforma.</p>
+  <div class="cover-version">VERSÃO 13 &nbsp;·&nbsp; EDIÇÃO COMPLETA</div>
+  <button class="cover-start-btn" onclick="abrirManual()">
+    <i class="fas fa-compass"></i>
+    Iniciar Leitura
+  </button>
+  <div class="cover-toc-preview">
+    <a class="toc-pill" onclick="abrirManual('s-intro')">Introdução</a>
+    <a class="toc-pill" onclick="abrirManual('s-login')">Login</a>
+    <a class="toc-pill" onclick="abrirManual('s-dashboard')">Dashboard</a>
+    <a class="toc-pill" onclick="abrirManual('s-supplies')">Abastecimentos</a>
+    <a class="toc-pill" onclick="abrirManual('s-stock')">Estoque</a>
+    <a class="toc-pill" onclick="abrirManual('s-consumo')">Consumo Op.</a>
+    <a class="toc-pill" onclick="abrirManual('s-relatorio')">Relatório PDF</a>
+    <a class="toc-pill" onclick="abrirManual('s-dados')">Dados</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MANUAL
+══════════════════════════════════════════════ -->
+<div id="manual">
+
+  <!-- SIDEBAR -->
+  <nav class="nav-sidebar" id="sidebar">
+    <div class="nav-brand">
+      <div class="nav-brand-icon">⚓</div>
+      <div>
+        <div class="nav-brand-text">NavControl</div>
+        <div class="nav-brand-version">MANUAL v13</div>
+      </div>
+    </div>
+    <div class="nav-search">
+      <input type="text" id="searchInput" placeholder="Buscar no manual..." oninput="filtrarNav(this.value)">
+    </div>
+    <div class="nav-scroll" id="navScroll">
+      <div class="nav-section-label">Primeiros Passos</div>
+      <a class="nav-link" onclick="irPara('s-intro')">    <i class="fas fa-info-circle"></i> Visão Geral</a>
+      <a class="nav-link" onclick="irPara('s-login')">    <i class="fas fa-lock"></i> Login & Acesso</a>
+      <a class="nav-link" onclick="irPara('s-layout')">   <i class="fas fa-th-large"></i> Interface & Navegação</a>
+
+      <div class="nav-section-label">Módulos Principais</div>
+      <a class="nav-link" onclick="irPara('s-dashboard')"><i class="fas fa-chart-line"></i> Dashboard</a>
+      <a class="nav-link" onclick="irPara('s-stock')">    <i class="fas fa-warehouse"></i> Posição de Estoque</a>
+      <a class="nav-link" onclick="irPara('s-supplies')"> <i class="fas fa-list"></i> Registros</a>
+      <a class="nav-link" onclick="irPara('s-logs')">     <i class="fas fa-history"></i> Logs</a>
+
+      <div class="nav-section-label">Análises</div>
+      <a class="nav-link" onclick="irPara('s-analysis')"> <i class="fas fa-chart-bar"></i> Consumo & Comparativo</a>
+      <a class="nav-link" onclick="irPara('s-consumo')">  <i class="fas fa-fire"></i> Consumo Operacional</a>
+      <a class="nav-link" onclick="irPara('s-evolution')"><i class="fas fa-chart-area"></i> Evolução</a>
+
+      <div class="nav-section-label">Documentos & Dados</div>
+      <a class="nav-link" onclick="irPara('s-relatorio')"><i class="fas fa-file-pdf"></i> Relatório Naval PDF</a>
+      <a class="nav-link" onclick="irPara('s-dados')">    <i class="fas fa-database"></i> Importar / Exportar</a>
+      <a class="nav-link" onclick="irPara('s-cadastros')"><i class="fas fa-building"></i> Cadastros</a>
+      <a class="nav-link" onclick="irPara('s-config')">   <i class="fas fa-cog"></i> Configurações</a>
+      <a class="nav-link" onclick="irPara('s-faq')">      <i class="fas fa-question-circle"></i> Dúvidas Frequentes</a>
+
+      <div class="nav-progress-bar"><div class="nav-progress-fill" id="progressFill"></div></div>
+    </div>
+    <div class="nav-back-cover">
+      <button class="nav-back-btn" onclick="voltarCapa()">
+        <i class="fas fa-arrow-left"></i> Voltar à capa
+      </button>
+    </div>
+  </nav>
+
+  <!-- HAMBURGER -->
+  <button class="hamburger" id="hamburger" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- CONTENT -->
+  <div class="content-area">
+    <div class="content-header">
+      <div class="content-header-title">NavControl — Manual de Uso</div>
+      <div class="content-header-section" id="currentSectionLabel">Visão Geral</div>
+    </div>
+
+    <!-- ─── VISÃO GERAL ─── -->
+    <section class="section" id="s-intro">
+      <div class="section-eyebrow"><i class="fas fa-compass"></i> Introdução</div>
+      <h1 class="section-title">O que é o <span class="hl">NavControl</span>?</h1>
+      <p class="section-lead">O NavControl é um sistema web completo para gestão de abastecimento de combustível (óleo diesel) e água em embarcações. Ele cobre desde o simples registro de um abastecimento até a emissão de relatórios navais com hash de auditoria.</p>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-card-icon fc-navy"><i class="fas fa-oil-can"></i></div>
+          <h4>Controle de Óleo</h4>
+          <p>Registre compras e transferências de diesel entre embarcações com cálculo automático de posição a bordo.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon fc-blue"><i class="fas fa-tint"></i></div>
+          <h4>Controle de Água</h4>
+          <p>Gerencie o estoque de água potável separadamente, com capacidades individuais por embarcação.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon fc-gold"><i class="fas fa-chart-line"></i></div>
+          <h4>Dashboard em Tempo Real</h4>
+          <p>4 gráficos e KPIs que se atualizam automaticamente a cada novo registro inserido.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon fc-red"><i class="fas fa-bell"></i></div>
+          <h4>Alertas Inteligentes</h4>
+          <p>Banners e badges automáticos quando o estoque cai abaixo dos limiares configuráveis.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon fc-green"><i class="fas fa-file-pdf"></i></div>
+          <h4>Relatório Naval PDF</h4>
+          <p>Documento oficial com visual naval, hash único de auditoria e suporte a multipáginas.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon fc-warn"><i class="fas fa-fire"></i></div>
+          <h4>Consumo Operacional</h4>
+          <p>Lançamento de combustível e água efetivamente consumidos em operação, com cálculo de L/hora.</p>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <i class="fas fa-info-circle"></i>
+        <div><strong>Plataforma:</strong> O NavControl roda inteiramente no navegador. Todos os dados são salvos automaticamente no <strong>localStorage</strong> do seu computador — sem necessidade de servidor ou internet após o carregamento inicial.</div>
+      </div>
+
+      <h3 class="sub-title"><i class="fas fa-ship"></i> Embarcações Pré-cadastradas</h3>
+      <p>O sistema já vem com <strong>12 embarcações</strong> da frota de demonstração. Você pode editar, excluir ou adicionar novas a qualquer momento.</p>
+      <div class="screen-mock">
+        <div class="screen-row"><div class="screen-icon fc-navy" style="border-radius:6px;background:rgba(11,30,61,0.1)"><i class="fas fa-ship" style="color:var(--navy);font-size:12px"></i></div><div class="screen-row-label">RS CORREGO DO OURO</div><div class="screen-row-meta"><span class="badge badge-navy" style="font-size:10px">Aço</span> &nbsp; Cap. Óleo: 14kL · Água: 5kL</div></div>
+        <div class="screen-row"><div class="screen-icon" style="background:rgba(139,94,60,0.1)"><i class="fas fa-ship" style="color:#8b5e3c;font-size:12px"></i></div><div class="screen-row-label">RS TRAPICHE</div><div class="screen-row-meta"><span class="badge badge-warn" style="font-size:10px">Madeira</span> &nbsp; Cap. Óleo: 10kL · Água: 3kL</div></div>
+        <div class="screen-row"><div class="screen-icon" style="background:rgba(139,94,60,0.1)"><i class="fas fa-ship" style="color:#8b5e3c;font-size:12px"></i></div><div class="screen-row-label">SEM LIMITES II / III / V</div><div class="screen-row-meta"><span class="badge badge-warn" style="font-size:10px">Madeira</span> &nbsp; Cap. Óleo: 22kL · Água: 8kL · Trip.: 18</div></div>
+      </div>
+    </section>
+
+    <!-- ─── LOGIN ─── -->
+    <section class="section" id="s-login">
+      <div class="section-eyebrow"><i class="fas fa-lock"></i> Acesso</div>
+      <h1 class="section-title">Login & <span class="hl">Segurança</span></h1>
+      <p class="section-lead">O NavControl usa um sistema de login simples para proteger o acesso aos dados operacionais. As credenciais são fixas na versão de demonstração.</p>
+
+      <div class="callout callout-warn">
+        <i class="fas fa-key"></i>
+        <div>
+          <strong>Credenciais padrão:</strong><br>
+          Usuário: <kbd>admin</kbd> &nbsp;&nbsp; Senha: <kbd>naval2024</kbd><br>
+          <span style="font-size:12px;margin-top:4px;display:block;opacity:0.8">Em ambiente de produção, essas credenciais devem ser alteradas no código-fonte.</span>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Abrir o arquivo</strong>
+            <p>Abra o arquivo <kbd>NavControl_v13.html</kbd> diretamente no navegador (Chrome, Edge ou Firefox recomendados).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Inserir as credenciais</strong>
+            <p>Na tela de login, informe o usuário e a senha. O campo de senha aceita <kbd>Enter</kbd> como atalho para confirmar.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Entrar no sistema</strong>
+            <p>Após o login, o sistema carrega automaticamente os dados salvos do localStorage e exibe o Dashboard principal.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-tip">
+        <i class="fas fa-lightbulb"></i>
+        <div><strong>Sessão persistente:</strong> Os dados permanecem salvos mesmo após fechar o navegador. Para apagar tudo, use <strong>Backup → Apagar Todos os Dados</strong> ou limpe o localStorage manualmente pelo DevTools do navegador.</div>
+      </div>
+    </section>
+
+    <!-- ─── LAYOUT ─── -->
+    <section class="section" id="s-layout">
+      <div class="section-eyebrow"><i class="fas fa-th-large"></i> Interface</div>
+      <h1 class="section-title">Navegação & <span class="hl">Interface</span></h1>
+      <p class="section-lead">O NavControl tem um layout de painel lateral fixo. Toda a navegação acontece pela barra esquerda, sem recarregamento de página.</p>
+
+      <h3 class="sub-title"><i class="fas fa-sidebar"></i> Barra Lateral</h3>
+      <p>A sidebar contém <strong>16 seções</strong> organizadas em grupos. Clique em qualquer item para navegar instantaneamente.</p>
+
+      <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;margin:16px 0;">
+        <div class="sidebar-demo">
+          <div class="sd-item active"><i class="fas fa-chart-line"></i> Dashboard</div>
+          <div class="sd-item"><i class="fas fa-list"></i> Registros</div>
+          <div class="sd-item"><i class="fas fa-warehouse"></i> Posição de Estoque <span style="margin-left:auto;background:#c0392b;color:#fff;font-size:9px;padding:1px 5px;border-radius:10px;">2</span></div>
+          <div class="sd-item"><i class="fas fa-fire"></i> Consumo Operacional</div>
+          <div class="sd-item"><i class="fas fa-file-pdf"></i> Relatório PDF</div>
+          <div class="sd-item"><i class="fas fa-cog"></i> Configurações</div>
+        </div>
+        <div style="flex:1;min-width:240px;">
+          <table class="doc-table">
+            <tr><th>Ícone</th><th>Significado</th></tr>
+            <tr><td>Número vermelho</td><td>Embarcações com estoque <strong>crítico</strong> — abaixo do limiar configurado (padrão 20%)</td></tr>
+            <tr><td>Número laranja</td><td>Embarcações com estoque <strong>baixo</strong> (padrão abaixo de 40%)</td></tr>
+            <tr><td>Item destacado</td><td>Seção atualmente ativa no painel</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <h3 class="sub-title"><i class="fas fa-moon"></i> Modo Escuro</h3>
+      <p>O botão de lua <i class="fas fa-moon" style="color:var(--gold)"></i> no topo da sidebar alterna entre tema claro e escuro. A preferência é salva automaticamente.</p>
+
+      <h3 class="sub-title"><i class="fas fa-compress-alt"></i> Sidebar Recolhível</h3>
+      <p>Clique no ícone <i class="fas fa-chevron-left" style="color:var(--gold)"></i> no topo da sidebar para recolhê-la e ganhar mais espaço na tela. Em telas menores que 1024px ela recolhe automaticamente.</p>
+
+      <h3 class="sub-title"><i class="fas fa-bell"></i> Sistema de Alertas</h3>
+      <p>Quando uma embarcação atinge estoque crítico, o sistema age em <strong>três frentes simultaneamente</strong>:</p>
+      <div class="alert-demo ad-crit"><i class="fas fa-exclamation-triangle"></i> Banner vermelho no topo do Dashboard com lista das embarcações afetadas</div>
+      <div class="alert-demo ad-warn"><i class="fas fa-exclamation-circle"></i> Badge laranja/vermelho ao lado de "Posição de Estoque" na sidebar</div>
+      <div class="alert-demo ad-ok"><i class="fas fa-check-circle"></i> Barras de progresso e bordas coloridas nos cards de estoque</div>
+    </section>
+
+    <!-- ─── DASHBOARD ─── -->
+    <section class="section" id="s-dashboard">
+      <div class="section-eyebrow"><i class="fas fa-chart-line"></i> Módulo</div>
+      <h1 class="section-title">Dashboard — <span class="hl">Visão Geral</span></h1>
+      <p class="section-lead">A tela inicial reúne os principais indicadores da frota em 4 KPIs, 4 gráficos interativos e uma tabela dos últimos abastecimentos.</p>
+
+      <h3 class="sub-title"><i class="fas fa-tachometer-alt"></i> Cards KPI</h3>
+      <div class="kpi-demo">
+        <div class="kpi-demo-card">
+          <div class="kpi-demo-label">🛢 Total Óleo</div>
+          <div class="kpi-demo-value">24.000 L</div>
+          <div class="kpi-demo-trend">5 compras registradas</div>
+        </div>
+        <div class="kpi-demo-card">
+          <div class="kpi-demo-label">💧 Total Água</div>
+          <div class="kpi-demo-value">3.500 L</div>
+          <div class="kpi-demo-trend">2 registros</div>
+        </div>
+        <div class="kpi-demo-card">
+          <div class="kpi-demo-label">💰 Custo Óleo</div>
+          <div class="kpi-demo-value">R$ 139k</div>
+          <div class="kpi-demo-trend">Preço médio: R$ 5,81/L</div>
+        </div>
+        <div class="kpi-demo-card">
+          <div class="kpi-demo-label">⚓ Embarcações</div>
+          <div class="kpi-demo-value">12</div>
+          <div class="kpi-demo-trend">5 abastecidas</div>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <i class="fas fa-info-circle"></i>
+        <div>O card de <strong>Embarcações</strong> é clicável — ao clicar, você é levado diretamente para a tela de Posição de Estoque. Quando há alertas, ele exibe um badge colorido com a contagem.</div>
+      </div>
+
+      <h3 class="sub-title"><i class="fas fa-chart-bar"></i> Os 4 Gráficos</h3>
+      <table class="doc-table">
+        <tr><th>Gráfico</th><th>O que mostra</th><th>Detalhe</th></tr>
+        <tr><td>Estoque de Óleo por Embarcação</td><td>Barras com posição atual de diesel em litros</td><td>Cores: vermelho = crítico, laranja = baixo, azul = ok</td></tr>
+        <tr><td>Estoque de Água por Embarcação</td><td>Barras com posição atual de água em litros</td><td>Mesma lógica de cores dos limiares</td></tr>
+        <tr><td>Gasto por Empresa (Óleo)</td><td>Donut com proporção de gasto por fornecedor</td><td>Hover mostra valor em R$ de cada empresa</td></tr>
+        <tr><td>Custo Mensal de Óleo</td><td>Barras mensais dos últimos 12 meses</td><td>Eixo Y em R$, hover mostra valor formatado</td></tr>
+      </table>
+
+      <h3 class="sub-title"><i class="fas fa-list"></i> Tabela de Últimos Abastecimentos</h3>
+      <p>Exibe os <strong>6 registros mais recentes</strong> (excluindo transferências-saída). O botão "Ver todos" leva para a seção de Registros completa.</p>
+    </section>
+
+    <!-- ─── ESTOQUE ─── -->
+    <section class="section" id="s-stock">
+      <div class="section-eyebrow"><i class="fas fa-warehouse"></i> Módulo</div>
+      <h1 class="section-title">Posição de <span class="hl">Estoque</span></h1>
+      <p class="section-lead">Monitore em tempo real o estoque de óleo e água de cada embarcação. Os cards mostram visualmente o nível atual em relação à capacidade total.</p>
+
+      <h3 class="sub-title"><i class="fas fa-id-card"></i> Cards de Embarcação</h3>
+      <p>Cada embarcação tem um card com:</p>
+      <ul class="icon-list">
+        <li><i class="fas fa-oil-can"></i><span><strong>Barra de óleo</strong> — mostra a porcentagem da capacidade em uso, com cor dinâmica baseada nos limiares configurados</span></li>
+        <li><i class="fas fa-tint"></i><span><strong>Barra de água</strong> — mesma lógica, com capacidade independente por embarcação</span></li>
+        <li><i class="fas fa-clock"></i><span><strong>Data do último registro</strong> — indica quando foi o último abastecimento de cada fluido</span></li>
+        <li><i class="fas fa-plus"></i><span><strong>Botões de atalho</strong> — "+ Óleo" e "+ Água" abrem o modal de abastecimento já com a embarcação e o fluido pré-selecionados</span></li>
+      </ul>
+
+      <div class="progress-demo">
+        <div class="pd-label"><span><strong>RS CORREGO DO OURO</strong> — Óleo</span><span>8.500 / 14.000 L</span></div>
+        <div class="pd-bar"><div class="pd-fill ok" style="width:60.7%" id="p1"></div></div>
+        <div class="pd-meta">60.7% — OK &nbsp;·&nbsp; Último: 20/02/2026</div>
+      </div>
+      <div class="progress-demo">
+        <div class="pd-label"><span><strong>RS SANA</strong> — Óleo</span><span>1.800 / 14.000 L</span></div>
+        <div class="pd-bar"><div class="pd-fill crit" style="width:12.8%" id="p2"></div></div>
+        <div class="pd-meta" style="color:var(--danger)">12.8% ⚠ CRÍTICO &nbsp;·&nbsp; Último: 15/01/2026</div>
+      </div>
+      <div class="progress-demo">
+        <div class="pd-label"><span><strong>SEM LIMITES II</strong> — Água</span><span>2.800 / 8.000 L</span></div>
+        <div class="pd-bar"><div class="pd-fill warn" style="width:35%" id="p3"></div></div>
+        <div class="pd-meta" style="color:var(--warn)">35.0% ⚠ baixo &nbsp;·&nbsp; Último: 10/02/2026</div>
+      </div>
+
+      <div class="callout callout-tip">
+        <i class="fas fa-lightbulb"></i>
+        <div><strong>Como os limiares funcionam:</strong> Os percentuais de alerta são <span data-tip="Configurável em Configurações → Threshold Crítico (padrão: 20%)">Crítico</span> e <span data-tip="Configurável em Configurações → Threshold Baixo (padrão: 40%)">Baixo</span>. Você pode ajustá-los em <strong>Configurações</strong> para se adequar à operação da sua frota.</div>
+      </div>
+
+      <h3 class="sub-title"><i class="fas fa-table"></i> Tabela Resumo</h3>
+      <p>Abaixo dos cards, há uma tabela com todos os dados numéricos das embarcações, incluindo percentuais coloridos e data do último abastecimento de óleo. Linhas com fundo colorido indicam situação crítica ou de atenção.</p>
+
+      <h3 class="sub-title"><i class="fas fa-calculator"></i> Como o Estoque é Calculado</h3>
+      <p>O sistema sempre usa o campo <strong>"Quantidade a Bordo Após"</strong> do registro mais recente de cada fluido para cada embarcação. Isso inclui tanto compras quanto passagens de entrada e saída.</p>
+      <div class="callout callout-warn">
+        <i class="fas fa-exclamation-triangle"></i>
+        <div>Se o último registro de uma embarcação foi uma <strong>transferência (passagem saída)</strong>, o estoque dela já estará reduzido automaticamente — você não precisa registrar um segundo lançamento.</div>
+      </div>
+    </section>
+
+    <!-- ─── REGISTROS / ABASTECIMENTO ─── -->
+    <section class="section" id="s-supplies">
+      <div class="section-eyebrow"><i class="fas fa-list"></i> Módulo</div>
+      <h1 class="section-title">Registros de <span class="hl">Abastecimento</span></h1>
+      <p class="section-lead">O módulo central do sistema. Aqui você registra todas as movimentações de fluidos — compras de fornecedores e transferências entre embarcações.</p>
+
+      <h3 class="sub-title"><i class="fas fa-filter"></i> Filtros Avançados</h3>
+      <div class="chip-list">
+        <span class="chip"><i class="fas fa-search"></i> Busca livre</span>
+        <span class="chip"><i class="fas fa-oil-can"></i> Tipo de fluido</span>
+        <span class="chip"><i class="fas fa-exchange-alt"></i> Tipo de operação</span>
+        <span class="chip"><i class="fas fa-ship"></i> Embarcação</span>
+        <span class="chip"><i class="fas fa-building"></i> Empresa</span>
+        <span class="chip"><i class="fas fa-calendar"></i> Período (de / até)</span>
+      </div>
+      <p>A barra de resumo abaixo dos filtros mostra em tempo real a <strong>contagem de registros filtrados</strong>, o total de litros e o valor gasto.</p>
+
+      <h3 class="sub-title"><i class="fas fa-plus-circle"></i> Novo Abastecimento (Compra)</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Abrir o modal</strong>
+            <p>Clique em <strong>+ Novo</strong> na barra de filtros, ou use o atalho <strong>+ Óleo / + Água</strong> nos cards de estoque para pré-preencher embarcação e fluido.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Selecionar embarcação e fluido</strong>
+            <p>O campo "Embarcação" alimenta automaticamente o campo "Quantidade Antes" com o estoque atual. Selecione o tipo: <span class="badge badge-navy" style="font-size:11px">🛢 Óleo</span> ou <span class="badge badge-blue" style="font-size:11px">💧 Água</span>.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Escolher tipo de operação</strong>
+            <p><strong>Compra</strong> = recebimento de fornecedor externo. <strong>Passagem</strong> = transferência de outra embarcação da frota. Na passagem, um segundo registro de saída é criado automaticamente na embarcação de origem.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <strong>Preencher quantidades</strong>
+            <p>Informe <strong>Solicitado</strong> (quanto foi pedido) e <strong>Abastecido</strong> (quanto foi efetivamente transferido). O campo <strong>Após</strong> é calculado automaticamente: <code>Antes + Abastecido</code>.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <strong>Inserir valor (apenas para compras de óleo)</strong>
+            <p>Informe o <strong>Valor Unitário (R$/L)</strong>. O <strong>Valor Total</strong> é calculado automaticamente. Para água e passagens, esses campos ficam opcionais.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <strong>Salvar</strong>
+            <p>Clique em <strong>Salvar Registro</strong>. O dashboard e o estoque são atualizados imediatamente. Um toast de confirmação aparece no canto da tela.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub-title"><i class="fas fa-exchange-alt"></i> Como Funciona a Passagem (Transferência)</h3>
+      <p>Ao registrar uma <strong>Passagem</strong>, o NavControl cria <em>automaticamente dois registros</em>:</p>
+      <table class="doc-table">
+        <tr><th>Registro</th><th>Onde aparece</th><th>Efeito no estoque</th></tr>
+        <tr><td>Passagem Entrada</td><td>Na embarcação <strong>destino</strong></td><td>Aumenta o <em>Quantidade Bordo</em> do destino</td></tr>
+        <tr><td>Passagem Saída</td><td>Na embarcação <strong>origem</strong> (oculto nos Registros, visível nos Logs)</td><td>Reduz o <em>Quantidade Bordo</em> da origem</td></tr>
+      </table>
+      <div class="callout callout-info">
+        <i class="fas fa-info-circle"></i>
+        <div>Os registros de <strong>passagem saída</strong> ficam ocultos na tela de Registros por padrão, mas aparecem nos <strong>Logs de Movimentação</strong>. Ao excluir uma passagem entrada, a saída correspondente é removida automaticamente.</div>
+      </div>
+
+      <h3 class="sub-title"><i class="fas fa-sort"></i> Ordenação e Paginação</h3>
+      <p>Clique nos cabeçalhos das colunas <strong>Data</strong>, <strong>Embarcação</strong>, <strong>Recebido</strong> e <strong>Valor Total</strong> para ordenar. O número de linhas por página é configurável (5, 10, 20 ou 50).</p>
+    </section>
+
+    <!-- ─── LOGS ─── -->
+    <section class="section" id="s-logs">
+      <div class="section-eyebrow"><i class="fas fa-history"></i> Módulo</div>
+      <h1 class="section-title">Logs de <span class="hl">Movimentação</span></h1>
+      <p class="section-lead">O módulo de Logs mostra <em>todas</em> as operações do sistema, incluindo as passagens de saída que ficam ocultas nos Registros comuns.</p>
+
+      <div class="callout callout-info">
+        <i class="fas fa-info-circle"></i>
+        <div>A diferença principal entre <strong>Registros</strong> e <strong>Logs</strong>: Registros ocultam as "passagem_saida" para uma visão limpa. Logs mostram absolutamente tudo, ideal para auditoria interna.</div>
+      </div>
+
+      <h3 class="sub-title"><i class="fas fa-filter"></i> Filtros Disponíveis</h3>
+      <div class="chip-list">
+        <span class="chip"><i class="fas fa-search"></i> Busca livre (nome, empresa, obs.)</span>
+        <span class="chip"><i class="fas fa-ship"></i> Embarcação específica</span>
+        <span class="chip"><i class="fas fa-tint"></i> Óleo ou Água</span>
+        <span class="chip"><i class="fas fa-exchange-alt"></i> Compra / Passagem entrada / Saída</span>
+        <span class="chip"><i class="fas fa-calendar"></i> Período (padrão: últimos 30 dias)</span>
+      </div>
+      <p>O contador no cabeçalho da tabela mostra quantos registros foram encontrados com os filtros ativos. Clique em <strong>Limpar</strong> para restaurar o período padrão.</p>
+    </section>
+
+    <!-- ─── ANÁLISES ─── -->
+    <section class="section" id="s-analysis">
+      <div class="section-eyebrow"><i class="fas fa-chart-bar"></i> Análises</div>
+      <h1 class="section-title">Consumo & <span class="hl">Comparativo</span></h1>
+      <p class="section-lead">Dois módulos de análise que ajudam a entender o padrão de abastecimento da frota ao longo do tempo.</p>
+
+      <h3 class="sub-title"><i class="fas fa-chart-bar"></i> Consumo por Embarcação</h3>
+      <p>Exibe somente <strong>compras externas</strong> (exclui transferências internas), para refletir o consumo real de combustível de cada embarcação. A tabela abaixo do gráfico inclui:</p>
+      <ul class="icon-list">
+        <li><i class="fas fa-oil-can"></i><span><strong>Total Óleo (L)</strong> — soma de todas as compras de óleo</span></li>
+        <li><i class="fas fa-dollar-sign"></i><span><strong>Gasto Óleo (R$)</strong> — custo total acumulado</span></li>
+        <li><i class="fas fa-calculator"></i><span><strong>Preço Médio (R$/L)</strong> — média ponderada pelo volume</span></li>
+        <li><i class="fas fa-tint"></i><span><strong>Total Água (L)</strong> — soma dos abastecimentos de água</span></li>
+      </ul>
+
+      <h3 class="sub-title"><i class="fas fa-balance-scale"></i> Comparativo Aço vs Madeira</h3>
+      <p>Compara o consumo entre os dois tipos de casco da frota. Exibe <strong>dois gráficos</strong>:</p>
+      <table class="doc-table">
+        <tr><th>Gráfico</th><th>Descrição</th></tr>
+        <tr><td>Barras por embarcação</td><td>Barras individuais com cor por material — azul marinho para Aço, marrom para Madeira. Escala proporcional ao consumo real.</td></tr>
+        <tr><td>Donut de proporção</td><td>Gráfico de rosca compacto (320px) mostrando a fatia percentual de cada tipo no total da frota.</td></tr>
+      </table>
+
+      <div class="callout callout-tip">
+        <i class="fas fa-lightbulb"></i>
+        <div>Os 4 cards KPI no topo do Comparativo mostram o custo médio por litro separado por tipo de casco — útil para identificar qual categoria da frota é mais eficiente em consumo.</div>
+      </div>
+
+      <h3 class="sub-title"><i class="fas fa-chart-area"></i> Evolução do Consumo</h3>
+      <p>Gráfico de linha mensal que permite selecionar uma <strong>embarcação específica</strong> e o <strong>tipo de fluido</strong>. Mostra a evolução mês a mês em litros, útil para identificar tendências sazonais.</p>
+    </section>
+
+    <!-- ─── CONSUMO OPERACIONAL ─── -->
+    <section class="section" id="s-consumo">
+      <div class="section-eyebrow"><i class="fas fa-fire"></i> Módulo Novo</div>
+      <h1 class="section-title">Consumo <span class="hl">Operacional</span></h1>
+      <p class="section-lead">Diferente dos abastecimentos (entrada de combustível no tanque), o Consumo Operacional registra o combustível e água <em>efetivamente usados</em> durante missões e operações.</p>
+
+      <div class="pullquote">
+        "Abastecimento" = o que entra no tanque.<br>
+        "Consumo Operacional" = o que a embarcação queima em serviço.
+      </div>
+
+      <h3 class="sub-title"><i class="fas fa-edit"></i> Como Lançar um Consumo</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Selecionar embarcação e data</strong>
+            <p>A data é pré-preenchida com hoje. Não é possível lançar datas futuras.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Informar quantidades</strong>
+            <p>Preencha <strong>Óleo Consumido (L)</strong> e/ou <strong>Água Consumida (L)</strong>. Pelo menos um dos dois deve ser maior que zero.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Informar horas de operação (opcional)</strong>
+            <p>Se informado, o sistema calcula automaticamente a <strong>eficiência em L/hora</strong> na tabela de histórico.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <strong>Adicionar observação (opcional)</strong>
+            <p>Exemplo: "Patrulha noturna no canal 3", "Operação de busca e salvamento SAR".</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <i class="fas fa-info-circle"></i>
+        <div>O Consumo Operacional é uma tabela <strong>independente</strong> dos abastecimentos. Ele <strong>não</strong> deduz automaticamente do estoque da embarcação — serve como registro de auditoria operacional. Para ajustar o estoque real, registre um abastecimento.</div>
+      </div>
+
+      <h3 class="sub-title"><i class="fas fa-calculator"></i> Indicador L/hora</h3>
+      <p>Quando as horas de operação são informadas, a coluna <strong>L/hora</strong> na tabela mostra a eficiência de consumo. Exemplo: uma embarcação que consumiu 500 L em 8 horas tem eficiência de <kbd>62,5 L/h</kbd>.</p>
+    </section>
+
+    <!-- ─── RELATÓRIO PDF ─── -->
+    <section class="section" id="s-relatorio">
+      <div class="section-eyebrow"><i class="fas fa-file-pdf"></i> Módulo Novo</div>
+      <h1 class="section-title">Relatório <span class="hl">Naval PDF</span></h1>
+      <p class="section-lead">Gere documentos oficiais com visual naval profissional, prontos para auditoria. Cada PDF recebe um Hash ID único e imutável para rastreabilidade.</p>
+
+      <h3 class="sub-title"><i class="fas fa-sliders-h"></i> Como Gerar o Relatório</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Selecionar a embarcação</strong>
+            <p>Escolha no dropdown qual embarcação deseja documentar.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Definir o período</strong>
+            <p>Informe a data de início e fim. A pré-visualização na tela atualiza automaticamente conforme você ajusta os filtros.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Verificar a pré-visualização</strong>
+            <p>Antes de gerar, confira na tela os registros que serão incluídos no PDF. Caso haja consumo operacional no período, ele aparece na segunda seção.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <strong>Clicar em "Gerar PDF Naval"</strong>
+            <p>O arquivo é gerado no navegador e baixado automaticamente. O nome do arquivo contém a sigla da embarcação, o período e o Hash ID.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub-title"><i class="fas fa-file-alt"></i> Estrutura do PDF</h3>
+      <div class="pdf-preview-demo">
+        <div class="pdf-header-demo">
+          <span style="font-size:22px;">⚓</span>
+          <div>
+            <div style="color:var(--gold-lt);font-weight:700;font-size:13px;">RELATÓRIO DE MOVIMENTAÇÃO DE COMBUSTÍVEL E ÁGUA</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:11px;">SISTEMA DE GESTÃO NAVAL — NAVCONTROL</div>
+          </div>
+          <div style="margin-left:auto;text-align:right">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,0.4)">NAV-3FA8C012</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.4)">Pág. 1/2</div>
+          </div>
+        </div>
+        <div class="pdf-gold-line"></div>
+        <div class="pdf-body-demo">
+          <div class="pdf-row-demo">
+            <div class="pdf-field"><div class="pdf-field-label">Embarcação</div><div class="pdf-field-value">RS CORREGO DO OURO</div></div>
+            <div class="pdf-field"><div class="pdf-field-label">Sigla</div><div class="pdf-field-value">RS_CDO</div></div>
+            <div class="pdf-field"><div class="pdf-field-label">Material</div><div class="pdf-field-value">Aço</div></div>
+            <div class="pdf-field"><div class="pdf-field-label">CC / CR</div><div class="pdf-field-value">1001 / R1001</div></div>
+            <div class="pdf-field"><div class="pdf-field-label">Período</div><div class="pdf-field-value">01/02 a 28/02/2026</div></div>
+          </div>
+          <div style="font-size:12px;color:var(--slate);margin-top:4px;">↓ Sumário com totais · Tabela de abastecimentos · (Pág. 2) Consumo Operacional se houver</div>
+        </div>
+        <div class="pdf-footer-demo">Documento de auditoria | NAV-3FA8C012 | Gerado em: 20/02/2026 14:32 | Operador: João Silva</div>
+      </div>
+
+      <h3 class="sub-title"><i class="fas fa-fingerprint"></i> O Hash de Auditoria</h3>
+      <p>Cada PDF recebe um <strong>Hash ID único</strong> gerado a partir da combinação de: ID da embarcação + período selecionado + número de registros + timestamp de geração.</p>
+      <div class="hash-display"><span class="hash-prefix">NAV-</span>3FA8C012</div>
+      <p>Este código aparece no <strong>cabeçalho</strong> e no <strong>rodapé</strong> de todas as páginas, e também no <strong>nome do arquivo</strong> baixado. Ele permite confirmar que o documento não foi alterado após a geração.</p>
+
+      <div class="callout callout-warn">
+        <i class="fas fa-exclamation-triangle"></i>
+        <div><strong>Importante:</strong> O Hash é gerado no momento do clique. Dois PDFs do mesmo período gerados em momentos diferentes terão hashes <em>diferentes</em> (pelo timestamp). Guarde o arquivo original para referência em auditorias.</div>
+      </div>
+
+      <h3 class="sub-title"><i class="fas fa-layer-group"></i> Multipáginas</h3>
+      <p>Se o período tiver muitos registros, o AutoTable do jsPDF quebra automaticamente em múltiplas páginas. Cada página tem cabeçalho e rodapé com o Hash. Se houver consumo operacional cadastrado no período, ele gera uma <strong>segunda seção dedicada</strong>.</p>
+    </section>
+
+    <!-- ─── DADOS ─── -->
+    <section class="section" id="s-dados">
+      <div class="section-eyebrow"><i class="fas fa-database"></i> Dados</div>
+      <h1 class="section-title">Importar, Exportar & <span class="hl">Backup</span></h1>
+      <p class="section-lead">O NavControl permite carregar dados de planilhas Excel, exportar para relatórios e fazer backup completo da base.</p>
+
+      <h3 class="sub-title"><i class="fas fa-file-import"></i> Importar Dados (Excel / CSV)</h3>
+      <p>O fluxo de importação funciona em <strong>3 etapas guiadas</strong>:</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Selecionar arquivo</strong>
+            <p>Arraste ou clique para selecionar um arquivo <kbd>.xlsx</kbd>, <kbd>.xls</kbd> ou <kbd>.csv</kbd>.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Mapear colunas</strong>
+            <p>O sistema detecta automaticamente os campos. Você pode corrigir o mapeamento: qual coluna da planilha corresponde a qual campo do sistema (data, embarcação, quantidade, etc.).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Confirmar importação</strong>
+            <p>Uma prévia dos dados é exibida. Ao confirmar, os registros são adicionados ao banco sem sobrescrever os existentes.</p>
+          </div>
+        </div>
+      </div>
+      <div class="callout callout-tip">
+        <i class="fas fa-lightbulb"></i>
+        <div>Para garantir que a importação funcione bem, use a opção <strong>Exportar → Template Excel</strong> para baixar um modelo vazio com os cabeçalhos corretos já formatados.</div>
+      </div>
+
+      <h3 class="sub-title"><i class="fas fa-file-export"></i> Exportar</h3>
+      <table class="doc-table">
+        <tr><th>Opção</th><th>Formato</th><th>Conteúdo</th></tr>
+        <tr><td>Todos os Abastecimentos</td><td>Excel (.xlsx)</td><td>Histórico completo com colunas formatadas</td></tr>
+        <tr><td>Template em Branco</td><td>Excel (.xlsx)</td><td>Modelo para preenchimento e importação posterior</td></tr>
+        <tr><td>Exportar Embarcações</td><td>Excel (.xlsx)</td><td>Cadastro completo das embarcações</td></tr>
+        <tr><td>Exportar Empresas</td><td>Excel (.xlsx)</td><td>Cadastro de fornecedores</td></tr>
+      </table>
+
+      <h3 class="sub-title"><i class="fas fa-database"></i> Backup & Restauração</h3>
+      <p>Use o módulo de Backup para segurança dos dados:</p>
+      <ul class="icon-list">
+        <li><i class="fas fa-download"></i><span><strong>Baixar Backup (JSON)</strong> — exporta toda a base em um arquivo JSON compacto</span></li>
+        <li><i class="fas fa-upload"></i><span><strong>Restaurar Backup</strong> — carrega um arquivo JSON e substitui os dados atuais</span></li>
+        <li><i class="fas fa-undo"></i><span><strong>Restaurar Demo</strong> — volta aos dados de demonstração originais</span></li>
+        <li><i class="fas fa-trash-alt"></i><span><strong>Apagar Tudo</strong> — remove todos os registros (irreversível sem backup)</span></li>
+      </ul>
+      <div class="callout callout-danger">
+        <i class="fas fa-exclamation-circle"></i>
+        <div><strong>Antes de apagar os dados ou restaurar um backup, faça sempre um download do backup atual.</strong> A operação não pode ser desfeita.</div>
+      </div>
+    </section>
+
+    <!-- ─── CADASTROS ─── -->
+    <section class="section" id="s-cadastros">
+      <div class="section-eyebrow"><i class="fas fa-building"></i> Cadastros</div>
+      <h1 class="section-title">Empresas & <span class="hl">Embarcações</span></h1>
+      <p class="section-lead">Manutenção do cadastro de fornecedores e da frota. Esses registros alimentam os dropdowns em todo o sistema.</p>
+
+      <h3 class="sub-title"><i class="fas fa-building"></i> Empresas Fornecedoras</h3>
+      <p>Campos do cadastro: <strong>Nome</strong>, <strong>CNPJ</strong> (com validação), <strong>Contato / E-mail</strong>, <strong>Telefone</strong> e <strong>Endereço</strong>.</p>
+      <div class="callout callout-warn">
+        <i class="fas fa-exclamation-triangle"></i>
+        <div>Não é possível excluir uma empresa que tenha abastecimentos vinculados. Primeiro exclua ou edite os registros relacionados.</div>
+      </div>
+
+      <h3 class="sub-title"><i class="fas fa-ship"></i> Embarcações</h3>
+      <p>Campos do cadastro:</p>
+      <table class="doc-table">
+        <tr><th>Campo</th><th>Descrição</th><th>Exemplo</th></tr>
+        <tr><td>Nome</td><td>Nome completo da embarcação</td><td>RS CORREGO DO OURO</td></tr>
+        <tr><td>Sigla</td><td>Código curto para exibição nos gráficos</td><td>RS_CDO</td></tr>
+        <tr><td>Material do Casco</td><td>Aço ou Madeira — usado nos filtros do Comparativo</td><td>Aço</td></tr>
+        <tr><td>CC</td><td>Código de Controle interno</td><td>1001</td></tr>
+        <tr><td>CR</td><td>Número de Registro</td><td>R1001</td></tr>
+        <tr><td>Tripulação</td><td>Número de tripulantes</td><td>12</td></tr>
+        <tr><td>Cap. Óleo (kL)</td><td>Capacidade de diesel em <em>quilolitros</em> — o sistema multiplica por 1.000 para litros</td><td>14 → 14.000 L</td></tr>
+        <tr><td>Cap. Água (kL)</td><td>Capacidade de água em quilolitros</td><td>5 → 5.000 L</td></tr>
+      </table>
+      <div class="callout callout-warn">
+        <i class="fas fa-exclamation-triangle"></i>
+        <div>Não é possível excluir uma embarcação que tenha movimentações registradas (abastecimentos ou transferências). Isso protege o histórico operacional.</div>
+      </div>
+    </section>
+
+    <!-- ─── CONFIGURAÇÕES ─── -->
+    <section class="section" id="s-config">
+      <div class="section-eyebrow"><i class="fas fa-cog"></i> Sistema</div>
+      <h1 class="section-title"><span class="hl">Configurações</span> do Sistema</h1>
+      <p class="section-lead">Personalize o comportamento do NavControl para a sua operação. Todas as configurações são salvas automaticamente.</p>
+
+      <table class="doc-table">
+        <tr><th>Configuração</th><th>Função</th><th>Padrão</th></tr>
+        <tr><td>Nome do Operador</td><td>Exibido na sidebar e no rodapé dos PDFs gerados</td><td>(em branco)</td></tr>
+        <tr><td>Densidade do Diesel</td><td>Usada no Memorial de Cálculo para converter toneladas/kg para litros</td><td>0,85 kg/L</td></tr>
+        <tr><td>Linhas por Página</td><td>Quantidade de registros por página em cada tabela (Abastecimentos, Empresas, Embarcações)</td><td>10</td></tr>
+        <tr><td>Threshold Crítico (%)</td><td>Abaixo deste percentual, o estoque é marcado em vermelho e gera alertas</td><td>20%</td></tr>
+        <tr><td>Threshold Baixo (%)</td><td>Abaixo deste percentual, o estoque é marcado em laranja</td><td>40%</td></tr>
+        <tr><td>Auto-Save</td><td>Salva automaticamente a cada alteração (vs. manual)</td><td>Desligado</td></tr>
+      </table>
+
+      <div class="callout callout-tip">
+        <i class="fas fa-lightbulb"></i>
+        <div><strong>Dica de operação:</strong> Configure o <strong>Nome do Operador</strong> com seu nome completo antes de gerar PDFs para auditoria — ele aparece no rodapé de cada página do relatório.</div>
+      </div>
+
+      <h3 class="sub-title"><i class="fas fa-calculator"></i> Memorial de Cálculo</h3>
+      <p>Utilitário de conversão de unidades usando a densidade configurada:</p>
+      <table class="doc-table">
+        <tr><th>Converter</th><th>Fórmula</th></tr>
+        <tr><td>Toneladas → Litros</td><td>(toneladas × 1.000) ÷ densidade</td></tr>
+        <tr><td>Quilogramas → Litros</td><td>kg ÷ densidade</td></tr>
+        <tr><td>Metros Cúbicos → Litros</td><td>m³ × 1.000</td></tr>
+      </table>
+    </section>
+
+    <!-- ─── FAQ ─── -->
+    <section class="section" id="s-faq">
+      <div class="section-eyebrow"><i class="fas fa-question-circle"></i> Suporte</div>
+      <h1 class="section-title">Dúvidas <span class="hl">Frequentes</span></h1>
+      <p class="section-lead">Respostas para as perguntas mais comuns sobre o uso do NavControl.</p>
+
+      <div id="faq-container"></div>
+
+      <div class="divider"></div>
+      <div class="callout callout-tip" style="margin-top:32px;">
+        <i class="fas fa-anchor"></i>
+        <div>
+          <strong>NavControl v13</strong> — Sistema de Gestão de Abastecimento Naval<br>
+          <span style="font-size:13px;opacity:0.8">Manual interativo gerado para a versão 13. Todas as funcionalidades são armazenadas localmente no navegador.</span>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /content-area -->
+</div><!-- /manual -->
+
+<script>
+// ═══════════════════════════════════════════════
+//  FAQ DATA
+// ═══════════════════════════════════════════════
+const faqData = [
+  {
+    q: "Os dados ficam salvos se eu fechar o navegador?",
+    a: "Sim. O NavControl usa o <strong>localStorage</strong> do navegador para persistir todos os dados automaticamente. Eles ficam salvos indefinidamente até que você limpe o cache do navegador ou use a opção 'Apagar Tudo' no módulo de Backup."
+  },
+  {
+    q: "Posso usar em múltiplos computadores?",
+    a: "Para compartilhar dados entre máquinas, use a função <strong>Backup → Baixar Backup</strong> e <strong>Restaurar Backup</strong> no outro computador. Não há sincronização automática na nuvem nesta versão."
+  },
+  {
+    q: "O que acontece se eu registrar uma passagem e excluir só a entrada?",
+    a: "Ao excluir um registro de <strong>passagem entrada</strong>, o registro de <strong>passagem saída</strong> correspondente na embarcação de origem também é excluído automaticamente. O sistema sempre mantém a consistência entre os dois lados da transferência."
+  },
+  {
+    q: "O estoque da embarcação de origem não está diminuindo após uma transferência.",
+    a: "Certifique-se de que o campo <strong>'Embarcação de Origem'</strong> foi preenchido corretamente ao registrar a passagem. O sistema cria automaticamente um registro de saída na origem com o novo saldo calculado. Verifique nos Logs se o registro de 'passagem_saida' foi criado."
+  },
+  {
+    q: "Como altero os limiares de alerta de estoque?",
+    a: "Vá em <strong>Configurações</strong> e ajuste os campos <strong>Threshold Crítico (%)</strong> e <strong>Threshold Baixo (%)</strong>. Os alertas em toda a interface são atualizados imediatamente após salvar."
+  },
+  {
+    q: "O Hash do PDF muda a cada geração?",
+    a: "Sim. O Hash inclui o <strong>timestamp</strong> do momento de geração, portanto dois PDFs do mesmo período gerados em instantes diferentes terão hashes diferentes. Guarde sempre o arquivo original para auditorias futuras."
+  },
+  {
+    q: "Posso importar dados históricos de uma planilha existente?",
+    a: "Sim. Use <strong>Importar → Selecionar arquivo</strong> e siga o mapeamento de colunas. Para garantir o formato correto, baixe primeiro o <strong>Template em Branco</strong> via Exportar e preencha-o com seus dados históricos."
+  },
+  {
+    q: "A capacidade das embarcações está em kL ou L no cadastro?",
+    a: "O campo de cadastro usa <strong>quilolitros (kL)</strong> para facilitar a entrada (ex.: 14 para 14.000 litros). Internamente, o sistema multiplica por 1.000 para todos os cálculos e exibições de litros."
+  },
+  {
+    q: "O Consumo Operacional deduz o estoque automaticamente?",
+    a: "Não. O Consumo Operacional é um registro paralelo para fins de controle e auditoria operacional. Para ajustar o estoque real, registre um abastecimento com quantidade negativa ou crie um novo registro de posição."
+  },
+  {
+    q: "Como colocar meu nome no rodapé dos PDFs?",
+    a: "Acesse <strong>Configurações</strong>, preencha o campo <strong>Nome do Operador</strong> e clique em Salvar. Seu nome aparecerá em todos os PDFs gerados a partir desse momento."
+  },
+  {
+    q: "É possível usar o sistema no celular?",
+    a: "Sim, a interface é responsiva. Em telas menores que 1024px a sidebar colapsa automaticamente e pode ser acessada pelo ícone de menu (hamburguer). Para experiência ideal, recomenda-se tablet ou desktop."
+  },
+  {
+    q: "Como faço para adicionar uma nova empresa fornecedora?",
+    a: "Vá em <strong>Empresas → Nova Empresa</strong>. Preencha o Nome e o CNPJ (obrigatórios, com validação). Após salvar, a empresa já estará disponível nos dropdowns do modal de abastecimento."
+  }
+];
+
+// ═══════════════════════════════════════════════
+//  RENDER FAQ
+// ═══════════════════════════════════════════════
+function renderFaq() {
+  const container = document.getElementById('faq-container');
+  container.innerHTML = faqData.map((item, i) => `
+    <div class="faq-item" id="faq-${i}" style="background:var(--white);border:1px solid var(--mist);border-radius:var(--r-lg);margin-bottom:10px;overflow:hidden;box-shadow:var(--sh);">
+      <button onclick="toggleFaq(${i})" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:none;border:none;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:600;color:var(--navy);text-align:left;gap:12px;">
+        <span><i class="fas fa-question-circle" style="color:var(--gold);margin-right:8px;"></i>${item.q}</span>
+        <i class="fas fa-chevron-down" id="faq-icon-${i}" style="color:var(--slate);flex-shrink:0;transition:transform 0.25s;font-size:12px;"></i>
+      </button>
+      <div id="faq-body-${i}" style="display:none;padding:0 20px 16px;font-size:14px;color:var(--slate);line-height:1.7;border-top:1px solid var(--mist);">
+        <div style="padding-top:12px;">${item.a}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleFaq(i) {
+  const body = document.getElementById(`faq-body-${i}`);
+  const icon = document.getElementById(`faq-icon-${i}`);
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  icon.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
+
+// ═══════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════
+function abrirManual(sectionId) {
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('manual').style.display = 'flex';
+  renderFaq();
+  animateProgressBars();
+  setupScrollSpy();
+  if (sectionId) {
+    setTimeout(() => irPara(sectionId), 80);
+  }
+}
+
+function voltarCapa() {
+  document.getElementById('manual').style.display = 'none';
+  document.getElementById('cover').style.display = 'flex';
+}
+
+function irPara(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    closeSidebar();
+  }
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+function closeSidebar() {
+  if (window.innerWidth <= 900) {
+    document.getElementById('sidebar').classList.remove('open');
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  SCROLL SPY
+// ═══════════════════════════════════════════════
+const sectionMap = {
+  's-intro':    'Visão Geral',
+  's-login':    'Login & Acesso',
+  's-layout':   'Interface & Navegação',
+  's-dashboard':'Dashboard',
+  's-stock':    'Posição de Estoque',
+  's-supplies': 'Registros',
+  's-logs':     'Logs',
+  's-analysis': 'Consumo & Comparativo',
+  's-consumo':  'Consumo Operacional',
+  's-evolution':'Evolução',
+  's-relatorio':'Relatório Naval PDF',
+  's-dados':    'Importar / Exportar',
+  's-cadastros':'Cadastros',
+  's-config':   'Configurações',
+  's-faq':      'Dúvidas Frequentes',
+};
+
+function setupScrollSpy() {
+  const sections = document.querySelectorAll('.section');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  // Intersection Observer for fade-in
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.08 });
+  sections.forEach(s => obs.observe(s));
+
+  // Scroll progress + active nav
+  const contentArea = document.querySelector('.content-area');
+  contentArea.addEventListener('scroll', () => {
+    // Progress
+    const scrolled = contentArea.scrollTop;
+    const total = contentArea.scrollHeight - contentArea.clientHeight;
+    document.getElementById('progressFill').style.width = (scrolled / total * 100) + '%';
+
+    // Active section
+    let current = 's-intro';
+    sections.forEach(s => {
+      const top = s.offsetTop - 120;
+      if (scrolled >= top) current = s.id;
+    });
+
+    navLinks.forEach(l => {
+      l.classList.remove('active');
+      if (l.getAttribute('onclick')?.includes(`'${current}'`)) l.classList.add('active');
+    });
+
+    document.getElementById('currentSectionLabel').textContent = sectionMap[current] || '';
+  });
+}
+
+// ═══════════════════════════════════════════════
+//  NAV SEARCH
+// ═══════════════════════════════════════════════
+function filtrarNav(q) {
+  const links = document.querySelectorAll('.nav-link');
+  links.forEach(l => {
+    const matches = !q || l.textContent.toLowerCase().includes(q.toLowerCase());
+    l.style.display = matches ? '' : 'none';
+  });
+}
+
+// ═══════════════════════════════════════════════
+//  PROGRESS BAR ANIMATION
+// ═══════════════════════════════════════════════
+function animateProgressBars() {
+  setTimeout(() => {
+    document.querySelectorAll('.pd-fill').forEach(el => {
+      const w = el.style.width;
+      el.style.width = '0%';
+      setTimeout(() => el.style.width = w, 100);
+    });
+  }, 400);
+}
+
+// ═══════════════════════════════════════════════
+//  KEYBOARD SHORTCUTS
+// ═══════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeSidebar();
+  if (e.key === '/' && document.getElementById('manual').style.display !== 'none') {
+    e.preventDefault();
+    document.getElementById('searchInput').focus();
+  }
+});
+</script>
+</body>
+</html>
