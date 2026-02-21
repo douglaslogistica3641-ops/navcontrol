@@ -5,8 +5,6 @@
 
 Sistema web para controle de abastecimento de óleo diesel e água potável em embarcações. Desenvolvido como uma aplicação de página única (SPA) com HTML, CSS e JavaScript puro, utilizando `localStorage` para persistência local dos dados.
 
-🔗 **Acesse a demonstração:** [navcontrol.netlify.app](https://navcontrol.netlify.app) (exemplo)  
-📄 **Documentação completa:** [Wiki do projeto](https://github.com/seuusuario/navcontrol/wiki)
 
 ---
 
@@ -65,11 +63,3 @@ Ao abrir o sistema pela primeira vez, utilize as credenciais padrão:
 ### Dados persistentes
 
 Todos os dados são armazenados no **`localStorage` do navegador**. Não há servidor backend – você pode usar o sistema offline, mas os dados ficam restritos ao dispositivo e navegador utilizados. Para compartilhar dados entre usuários, utilize as funções de **exportar/importar backup** ou planilhas.
-
----
-
-## Instalação e execução local
-
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/seuusuario/navcontrol.git
